@@ -22,6 +22,7 @@ from lerobot.processor import (
 )
 from lerobot.utils.constants import POLICY_POSTPROCESSOR_DEFAULT_NAME, POLICY_PREPROCESSOR_DEFAULT_NAME
 from lerobot.policies.trivial_policy.configuration_trivial_policy import TrivialConfig
+from lerobot.processor.converters import policy_action_to_transition, transition_to_policy_action
 
 
 def make_trivial_pre_post_processors(
@@ -50,7 +51,10 @@ def make_trivial_pre_post_processors(
 		steps=input_steps, name=POLICY_PREPROCESSOR_DEFAULT_NAME
 	)
 	post = PolicyProcessorPipeline[PolicyAction, PolicyAction](
-		steps=output_steps, name=POLICY_POSTPROCESSOR_DEFAULT_NAME
+		steps=output_steps, 
+		name=POLICY_POSTPROCESSOR_DEFAULT_NAME,
+		to_transition=policy_action_to_transition,
+        to_output=transition_to_policy_action,
 	)
 
 	return pre, post
